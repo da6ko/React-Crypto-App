@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const App = () => {
   const [cryptoData, setCryptoData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,9 +19,23 @@ const App = () => {
     fetchData();
   }, []);
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredCryptoData = cryptoData.filter((crypto) =>
+    crypto.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <h1>Crypto Information</h1>
+      <input
+        type="text"
+        placeholder="Search by name"
+        value={searchTerm}
+        onChange={handleSearch}
+      />
       <table>
         <thead>
           <tr>
@@ -31,7 +46,7 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {cryptoData.map((crypto) => (
+          {filteredCryptoData.map((crypto) => (
             <tr key={crypto.id}>
               <td>{crypto.name}</td>
               <td>{crypto.symbol}</td>
